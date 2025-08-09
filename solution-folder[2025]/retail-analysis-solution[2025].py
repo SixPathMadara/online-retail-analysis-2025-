@@ -4,20 +4,28 @@
 
 import pandas as pd 
 
-df=pd.read_excel('online retail/Online Retail.xlsx', sheet_name='Online Retail')
+df=pd.read_excel('online retail/Online Retail.xlsx',sheet_name='Online Retail')
 
-<<<<<<< HEAD
-print(df)
-=======
+#print(df)
 #sum quantity by invoice date
 df['InvoiceDate_reformat']=pd.to_datetime(df['InvoiceDate'])
-Quantity_Sum=df.groupby(['InvoiceDate_reformat','Description'])['Quantity'].sum().reset_index()
+#Group by Daily quantity
+Daily_Quantity_Sum=df.groupby([pd.Grouper(key='InvoiceDate_reformat',freq='D'),'Description'])['Quantity'].sum().reset_index()
+#Group by weekly quantity
+Weekly_Quantity_Sum=df.groupby([pd.Grouper(key='InvoiceDate_reformat',freq='W'),'Description'])['Quantity'].sum().reset_index()
+#Group by Monthly quantity
+Monthly_Quantity_Sum=df.groupby([pd.Grouper(key='InvoiceDate_reformat',freq='ME'),'Description'])['Quantity'].sum().reset_index()
 
 #move quanity sum to new sheet in excel
 with pd.ExcelWriter('online retail/Online Retail.xlsx',engine='openpyxl', mode='a',if_sheet_exists='replace') as writer:
-    Quantity_Sum.to_excel(writer,sheet_name='Daily Sum',index=False)
+    Daily_Quantity_Sum.to_excel(writer,sheet_name='Daily Sum',index=False)
+    Weekly_Quantity_Sum.to_excel(writer,sheet_name='Weekly Sum',index=False)
+    Monthly_Quantity_Sum.to_excel(writer,sheet_name='Monthly Sum',index=False)
 
-print(pd.read_excel('online retail/Online Retail.xlsx', sheet_name='Daily Sum'))
 
 
->>>>>>> fc9b8e0 (code changes 20072025)
+print(Daily_Quantity_Sum)
+print(Weekly_Quantity_Sum)
+print(Monthly_Quantity_Sum)
+
+
