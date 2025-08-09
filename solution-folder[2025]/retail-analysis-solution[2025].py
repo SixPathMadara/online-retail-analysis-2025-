@@ -3,10 +3,16 @@
 # database: https://archive.ics.uci.edu/dataset/352/online+retail
 
 import pandas as pd 
+import os
 
-df=pd.read_excel('online retail/Online Retail.xlsx',sheet_name='Online Retail')
+file_path= 'online retail/Online Retail.xlsx'
 
-#print(df)
+if os.path.exists(file_path):
+    df=pd.read_excel(file_path,sheet_name='Online Retail')
+else:
+    print('File not found')
+
+
 #sum quantity by invoice date
 df['InvoiceDate_reformat']=pd.to_datetime(df['InvoiceDate'])
 #Group by Daily quantity
@@ -25,7 +31,7 @@ with pd.ExcelWriter('online retail/Online Retail.xlsx',engine='openpyxl', mode='
 
 
 print(Daily_Quantity_Sum)
-print(Weekly_Quantity_Sum)
-print(Monthly_Quantity_Sum)
+#print(Weekly_Quantity_Sum)
+#print(Monthly_Quantity_Sum)
 
 
